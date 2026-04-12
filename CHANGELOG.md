@@ -2,6 +2,77 @@
 
 All notable changes to GBrain will be documented in this file.
 
+## [0.8.1] - 2026-04-11
+
+### Added
+
+- **Your brain now enforces its own graph integrity.** The Iron Law of Back-Linking
+  is now mandatory across all skills. Every mention of a person or company creates
+  a bidirectional link -- the new page points to the entity, AND the entity's page
+  points back. This was the single biggest pattern missing from v0.8.0, and it
+  transforms your brain from a flat file store into a traversable knowledge graph.
+
+- **Filing rules prevent the #1 brain mistake.** New cross-cutting filing rules
+  (`skills/_brain-filing-rules.md`) stop the most common error: dumping everything
+  into `sources/`. Articles about people go in `people/`. Company research goes in
+  `companies/`. Reusable frameworks go in `concepts/`. Sources is for raw data only.
+  Every brain-writing skill now references these rules.
+
+- **Your enrichment skill actually works now.** Rewritten from a 46-line API list to
+  a full 7-step protocol with 3-tier enrichment (scale effort to entity importance),
+  person page templates with real sections (What They Believe, What They're Building,
+  Trajectory, Hobby Horses), pluggable data source table, validation rules, and bulk
+  enrichment safety patterns.
+
+- **Ingest handles everything you throw at it.** Articles, videos, podcasts, PDFs,
+  screenshots, meeting transcripts, social media -- each with a complete workflow.
+  Video pages MUST link to raw transcripts. Meeting pages MUST propagate to entity
+  pages. Every fact MUST have a `[Source: ...]` citation. Raw sources preserved via
+  `.raw/` sidecars (< 100MB git) or `.redirect.yaml` pointers (>= 100MB cloud storage).
+
+- **Citation requirements across all skills.** Every fact written to a brain page
+  must carry inline `[Source: ...]` citations. Three formats (direct attribution,
+  API/external, synthesis) with a source precedence hierarchy. Your agent can now
+  trace any claim back to its origin.
+
+- **Test Before Bulk saves you from yourself.** Codified operating principle: test
+  on 3-5 items, read actual output, fix the approach, THEN bulk execute. One bad
+  bulk run can write 100 mediocre pages that are harder to fix than to do right.
+
+- **Maintain skill catches what you missed.** New health dimensions: back-link
+  enforcement (find broken graph edges), citation audit (find uncited facts),
+  filing rule violations (find misfiled pages), and benchmark testing (verify
+  search quality hasn't regressed across 4 query difficulty tiers).
+
+- **Voice calls don't crash on em dashes anymore.** Critical production fix:
+  non-ASCII characters (em dashes, smart quotes, arrows) in prompt context caused
+  broken surrogate pairs that silently killed Twilio WebSocket connections. Now
+  sanitized automatically. Also: PII scrub prevents the voice agent from reading
+  phone numbers and emails aloud.
+
+- **DIY voice pipeline option.** v2 architecture: Deepgram STT + Claude +
+  Cartesia/OpenAI TTS as an alternative to the OpenAI Realtime black box. Full
+  control over each pipeline stage. Streaming SSE with sentence-boundary TTS
+  dispatch, reconnect logic with backoff, keepalives, and Smart VAD (Silero) default.
+
+- **X-to-Brain gets eyes.** Tweet image OCR via vision models catches visual context
+  text-only collectors miss. Plus: real-time monitoring via Filtered Stream API
+  (seconds vs 30-min polling), 6-dimension tweet rating rubric with 60-min re-rating,
+  outbound tweet monitoring (60-second post-tweet engagement tracker), and automatic
+  X-to-Brain pipeline for entity propagation from tweet interactions.
+
+### Changed
+
+- **Enrich skill** rewritten from 46 lines to a full production protocol.
+- **Ingest skill** expanded with media workflows, filing rules, and citation
+  requirements.
+- **Maintain skill** expanded with 4 new health dimensions.
+- **Query skill** now propagates citations and includes search quality awareness.
+- **Briefing skill** now enforces back-linking and includes citation formatting.
+- **Voice recipe** bumped to v0.8.1 with critical production fixes.
+- **X-to-Brain recipe** bumped to v0.8.1 with OCR, real-time, and rating patterns.
+- Skills version bumped to 0.8.1 across manifest.json.
+
 ## [0.8.0] - 2026-04-11
 
 ### Added
