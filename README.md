@@ -1,3 +1,18 @@
+# Open GBrain
+
+You can now use Claude, GPT-5.5, OR DeepSeek, or any custom OpenAI-compatible model with gbrain—instead of being locked to a single provider.
+
+What changed:
+
+- Pick your AI provider when running gbrain init. The setup wizard now asks which LLM you want to use (Anthropic, OpenAI, DeepSeek, or a custom endpoint) and wires up the API key automatically.
+- Override per job with gbrain agent run --provider <name> --base-url <url> if you need a different model for a specific task.
+- Backward compatible — if you already have ANTHROPIC_API_KEY or OPENAI_API_KEY set, everything keeps working. Your existing config auto-upgrades to the new format behind the scenes.
+- Cost previews stay honest — gbrain sync --all still estimates embedding costs when using OpenAI, and shows "cost unknown" for other providers instead of guessing.
+- Doctor checks your AI setup — gbrain doctor now verifies that your LLM and embedding providers are properly configured and tells you if an API key is missing.
+Under the hood, this is built on a unified provider layer so adding support for new models in the future is a one-line change, not a refactor.
+
+This is built for personal use, as Anthropic & OpenAI are blocked in Hong Kong; your results may vary
+
 # GBrain
 
 Your AI agent is smart but forgetful. GBrain gives it a brain.
