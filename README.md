@@ -11,7 +11,7 @@ What changed:
 - Doctor checks your AI setup — gbrain doctor now verifies that your LLM and embedding providers are properly configured and tells you if an API key is missing.
 Under the hood, this is built on a unified provider layer so adding support for new models in the future is a one-line change, not a refactor.
 
-This is built for personal use, as Anthropic & OpenAI are blocked in Hong Kong; your results may vary
+This is built for personal use, as Anthropic & OpenAI are blocked in Hong Kong; your results may vary or your laptop might explode
 
 # GBrain
 
