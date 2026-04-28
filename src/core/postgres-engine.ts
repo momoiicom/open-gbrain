@@ -3,6 +3,7 @@ import type { BrainEngine, LinkBatchInput, TimelineBatchInput, ReservedConnectio
 import { MAX_SEARCH_LIMIT, clampSearchLimit } from './engine.ts';
 import { runMigrations } from './migrate.ts';
 import { SCHEMA_SQL } from './schema-embedded.ts';
+import { verifySchema } from './schema-verify.ts';
 import type {
   Page, PageInput, PageFilters, PageType,
   Chunk, ChunkInput, StaleChunkRow,
@@ -107,6 +108,14 @@ export class PostgresEngine implements BrainEngine {
       const { applied } = await runMigrations(this);
       if (applied > 0) {
         console.log(`  ${applied} migration(s) applied`);
+      }
+
+      // Post-migration schema verification: catches columns that migrations
+      // defined but PgBouncer transaction-mode silently failed to create.
+      // Self-heals missing columns via ALTER TABLE ADD COLUMN IF NOT EXISTS.
+      const verify = await verifySchema(this);
+      if (verify.healed.length > 0) {
+        console.log(`  Schema verify: self-healed ${verify.healed.length} missing column(s)`);
       }
     } finally {
       await conn`SELECT pg_advisory_unlock(42)`;

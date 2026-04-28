@@ -2,6 +2,14 @@
 
 All notable changes to GBrain will be documented in this file.
 
+## [0.22.6] - 2026-04-28
+
+### Schema verification after migrations
+
+- Post-migration schema verification catches columns that were defined in migrations but silently failed to create (common with PgBouncer transaction-mode poolers).
+- Self-healing: automatically adds missing columns via ALTER TABLE when detected.
+- Prevents the "column X does not exist" embed failures that occur when schema version is ahead of actual table state.
+
 ## [0.22.5] - 2026-04-27
 
 ## **Autopilot stops re-importing your whole brain when a commit gets garbage-collected.**
